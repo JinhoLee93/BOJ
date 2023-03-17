@@ -1,35 +1,35 @@
 import Foundation
 
 func solution(_ info:[Int], _ edges:[[Int]]) -> Int {
-    var res = Int.min
+    var res = 0
     var graph: [Int:[Int]] = [:]
     for e in edges {
-        var src = e[0], dest = e[1] 
-        graph[src, default: []].append(dest)
-        graph[dest, default: []].append(src)
+        var src = e[0], dest = e[1]
+        graph[src, default: []].append(dest) 
+        graph[dest, default: []].append(src) 
     }
     
     var visited: Set<Int> = []
-    func backtrack(_ dest: Int, _ s: Int, _ w: Int, _ start: Bool, _ temp: inout [Int]) {
-        guard let n = graph[dest] else { return }
-        if (w >= s && !start) || visited.contains(dest) {
-            
+    func backtrack(_ dest: Int, _ sheep: Int, _ wolf: Int, _ beginning: Bool, _ temp: inout [Int]) {
+        guard let g = graph[dest] else { return }
+        if (sheep <= wolf && !beginning) || visited.contains(dest) {
+             
             return
         }
         
         visited.insert(dest)
-        for nn in n {
-            temp.append(nn)
+        for n in g {
+            temp.append(n)
         }
-        for next in temp {
+        for nn in temp {
             if info[dest] == 0 {
-                backtrack(next, s + 1, w, false, &temp)
-                res = max(res, s + 1)
+                backtrack(nn, sheep + 1, wolf, false, &temp)
+                res = max(res, sheep + 1)
             } else {
-                backtrack(next, s, w + 1, false, &temp)
+                backtrack(nn, sheep, wolf + 1, false, &temp)
             }
         }
-        for nn in n {
+        for n in g {
             temp.popLast()
         }
         visited.remove(dest)
