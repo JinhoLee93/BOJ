@@ -14,7 +14,6 @@ for i in range(M):
         for k in range(len(sharks[i][j])):
             sharks[i][j][k] -= 1
 
-# Shark's directions = 0 = UP, 1 = DOWN, 2 = LEFT, 3 = RIGHT
 def solve(board, sharks, curSharkDirs, k):
     numOfSharks = len(curSharkDirs)
     N = len(board)
@@ -30,9 +29,7 @@ def solve(board, sharks, curSharkDirs, k):
     for num in range(1000):
         newBoard = [[0 for _ in range(N)] for _ in range(N)]
 
-        # Getting the next cell for the sharks
         sharksPos.sort(key=lambda x:x[2])
-        toBeRemoved = set()
         for i in range(len(sharksPos)):
             sd = curSharkDirs[i]
             if sd == -1:
