@@ -8,12 +8,8 @@ def solve():
     blueBoard = [[0 for _ in range(6)] for _ in range(4)]
     greenBoard = [[0 for _ in range(4)] for _ in range(6)]
 
-    # Place a block in the red board and the block will move
-    # row-wise to the blue board and
-    # col-wise to the green board.
     for block in blocks:
         t, r, c = block
-        # Check the blue block
         if t == 1:
             lastCol = -1
             for blueC in range(len(blueBoard[0])):
@@ -23,6 +19,13 @@ def solve():
                     break
             blueBoard[r][lastCol] = 1
 
+            lastRow = -1
+            for greenR in range(len(greenBoard)):
+                if greenBoard[greenR][c] == 0:
+                    lastRow = greenR
+                else:
+                    break
+            greenBoard[lastRow][c] = 1
         elif t == 2:
             lastCol = -1
             for blueC in range(1, len(blueBoard[0])):
@@ -33,6 +36,14 @@ def solve():
             blueBoard[r][lastCol] = 1
             blueBoard[r][lastCol - 1] = 1
 
+            lastRow = -1
+            for greenR in range(len(greenBoard)):
+                if greenBoard[greenR][c] == 0 and greenBoard[greenR][c + 1] == 0:
+                    lastRow = greenR
+                else:
+                    break
+            greenBoard[lastRow][c] = 1
+            greenBoard[lastRow][c + 1] = 1
         elif t == 3:
             lastCol = -1
             for blueC in range(len(blueBoard[0])):
@@ -42,6 +53,15 @@ def solve():
                     break
             blueBoard[r][lastCol] = 1
             blueBoard[r + 1][lastCol] = 1
+
+            lastRow = -1
+            for greenR in range(1, len(greenBoard)):
+                if greenBoard[greenR][c] == 0 and greenBoard[greenR - 1][c] == 0:
+                    lastRow = greenR
+                else:
+                    break
+            greenBoard[lastRow][c] = 1
+            greenBoard[lastRow - 1][c] = 1
 
         toBeRemovedFromBlueCol = []
         for blueC in range(len(blueBoard[0])):
@@ -62,7 +82,6 @@ def solve():
                     blueBoard[blueR][blueC], blueBoard[blueR][blueC - 1] = \
                         blueBoard[blueR][blueC - 1], blueBoard[blueR][blueC]
 
-        # In case there's any block in 0, 1 cols in the blue board
         maxNumOfBlueBlocksInZeroOne = 0
         for blueR in range(len(blueBoard)):
             curNumOfBlueBlocks = 0
@@ -79,36 +98,6 @@ def solve():
             for blueC in range(maxNumOfBlueBlocksInZeroOne):
                 for blueR in range(len(blueBoard)):
                     blueBoard[blueR][blueC] = 0
-
-        # Check the green board
-        if t == 1:
-            lastRow = -1
-            for greenR in range(len(greenBoard)):
-                if greenBoard[greenR][c] == 0:
-                    lastRow = greenR
-                else:
-                    break
-            greenBoard[lastRow][c] = 1
-
-        elif t == 2:
-            lastRow = -1
-            for greenR in range(len(greenBoard)):
-                if greenBoard[greenR][c] == 0 and greenBoard[greenR][c + 1] == 0:
-                    lastRow = greenR
-                else:
-                    break
-            greenBoard[lastRow][c] = 1
-            greenBoard[lastRow][c + 1] = 1
-
-        elif t == 3:
-            lastRow = -1
-            for greenR in range(1, len(greenBoard)):
-                if greenBoard[greenR][c] == 0 and greenBoard[greenR - 1][c] == 0:
-                    lastRow = greenR
-                else:
-                    break
-            greenBoard[lastRow][c] = 1
-            greenBoard[lastRow - 1][c] = 1
 
         toBeRemovedFromGreenRow = []
         for greenR in range(len(greenBoard)):
@@ -127,7 +116,6 @@ def solve():
             for greenR in range(blocksToBeRemoved, 0, -1):
                 greenBoard[greenR], greenBoard[greenR - 1] = greenBoard[greenR - 1], greenBoard[greenR]
 
-        # In case there's any block in 0, 1 rows in the green board
         maxNumOfGreenBlocksInZeroOne = 0
         for greenC in range(len(greenBoard[0])):
             curNumOfGreenBlocks = 0
@@ -146,14 +134,6 @@ def solve():
                     greenBoard[greenR][greenC] = 0
 
         res += len(toBeRemovedFromBlueCol) + len(toBeRemovedFromGreenRow)
-
-        # print("blue")
-        # for blueR in range(len(blueBoard)):
-        #     print(blueBoard[blueR])
-        #
-        # print("green")
-        # for greenR in range(len(greenBoard)):
-        #     print(greenBoard[greenR])
 
     numOfBlocks = 0
     for blueR in range(len(blueBoard)):
