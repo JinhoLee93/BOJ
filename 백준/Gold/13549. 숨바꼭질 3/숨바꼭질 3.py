@@ -1,8 +1,5 @@
 import sys
-import copy
 from collections import deque
-from collections import defaultdict
-sys.setrecursionlimit(10**6)
 
 N, K = list(map(int, input().split(" ")))
 
