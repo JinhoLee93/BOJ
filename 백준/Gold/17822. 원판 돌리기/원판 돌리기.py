@@ -1,9 +1,5 @@
 import sys
-import math
-import copy
 from collections import deque
-from collections import defaultdict
-sys.setrecursionlimit(10**6)
 
 N, M, T = list(map(int, input().split(" ")))
 board = []
