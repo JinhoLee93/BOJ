@@ -1,10 +1,3 @@
-import sys
-import math
-import copy
-from collections import deque
-from collections import defaultdict
-sys.setrecursionlimit(10**6)
-
 N = int(input())
 A = []
 for _ in range(N):
@@ -103,6 +96,6 @@ def solve():
                                 p5 += A[rp][cp]
 
                     res = min(res, max(p1, p2, p3, p4, p5) - min(p1, p2, p3, p4, p5))
-
     print(res)
+    
 solve()
