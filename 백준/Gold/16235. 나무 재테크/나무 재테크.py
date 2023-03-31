@@ -61,6 +61,7 @@ def solve():
                                 else:
                                     trees[nxtR][nxtC][1] = toBePopulated
                 board[r][c] += resources[r][c]
+                
     res = 0
     for r in range(N):
         for c in range(N):
