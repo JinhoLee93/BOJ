@@ -31,9 +31,9 @@ def solve():
                             board[r][c] -= age * trees[r][c][age]
                             newTree[age + 1] = trees[r][c][age]
                         else:
+                            anyResourcesLeft = False
                             ableToFeed = board[r][c] // age
                             if ableToFeed == 0:
-                                anyResourcesLeft = False
                                 deadTreesAboutToBeResources += (age // 2) * trees[r][c][age]
                                 continue
                             board[r][c] -= age * ableToFeed
@@ -46,27 +46,26 @@ def solve():
         for r in range(N):
             for c in range(N):
                 if trees[r][c]:
-                    toBePopulated = 0
                     for age in trees[r][c]:
+                        toBePopulated = 0
                         if age % 5 == 0:
                             toBePopulated += trees[r][c][age]
 
-                    if toBePopulated > 0:
-                        for _ in range(toBePopulated):
+                        if toBePopulated > 0:
                             for d in dirs:
                                 nxtR, nxtC = r + d[0], c + d[1]
                                 if nxtR < 0 or nxtC < 0 or nxtR >= N or nxtC >= N:
                                     continue
                                 if 1 in trees[nxtR][nxtC]:
-                                    trees[nxtR][nxtC][1] += 1
+                                    trees[nxtR][nxtC][1] += toBePopulated
                                 else:
-                                    trees[nxtR][nxtC][1] = 1
+                                    trees[nxtR][nxtC][1] = toBePopulated
                 board[r][c] += resources[r][c]
-
     res = 0
     for r in range(N):
         for c in range(N):
-            res += sum(trees[r][c].values())
+            if trees[r][c]:
+                res += sum(trees[r][c].values())
 
     print(res)
 
