@@ -1,20 +1,17 @@
+import sys
 from collections import defaultdict
 from collections import deque
 
 V, E, P = list(map(int, input().split(" ")))
-paths = []
+graph = defaultdict(list)
 for _ in range(E):
-    paths.append(list(map(int, input().split(" "))))
+    src, dest, cost = list(map(int, sys.stdin.readline().split(" ")))
+    graph[src - 1].append((dest - 1, cost))
+    graph[dest - 1].append((src - 1, cost))
 
 def solve():
-    graph = defaultdict(list)
-    for path in paths:
-        src, dest, cost = path[0] - 1, path[1] - 1, path[2]
-        graph[src].append((dest, cost))
-        graph[dest].append((src, cost))
-
     def dijkstra():
-        fromTheStart = [float("inf") for _ in range(V)]
+        fromTheStart = [float("inf")] * V
         fromTheStart[0] = 0
         q = deque([(0, 0)])
         while q:
@@ -29,7 +26,7 @@ def solve():
                 fromTheStart[nxtV] = nxtCost
                 q.append((nxtV, nxtCost))
 
-        fromP = [float("inf") for _ in range(V)]
+        fromP = [float("inf")] * V
         fromP[P - 1] = 0
         q = deque([(P - 1, 0)])
         while q:
