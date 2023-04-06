@@ -1,70 +1,35 @@
+from collections import deque
+
 N, K = list(map(int, input().strip().split()))
-belt = list(map(int, input().strip().split()))
-cellsWithRobot = [False] * N
-robots = []
-busted = 0
-for i in range(2 * N):
-    if belt[i] == 0:
-        busted += 1
+b = deque(list(map(int, input().strip().split())))
+r = deque([False] * N)
 
-process = 1
-while busted < K:
-    # Move the Belt
-    toBeAddedAtFirst = belt.pop()
-    belt = [toBeAddedAtFirst] + belt
+p, d = 0, 0
+while True:
+    p += 1
+    b.rotate(1)
+    r.rotate(1)
 
-    toBePopped = 0
-    for i in range(len(robots)):
-        curIdx = robots[i]
-        nxtIdx = curIdx + 1
-
-        # Move the Belt
-        if nxtIdx == N - 1:
-            cellsWithRobot[curIdx] = False
-            toBePopped += 1
-            continue
-        else:
-            cellsWithRobot[curIdx] = False
-            robots[i] = nxtIdx
-            cellsWithRobot[nxtIdx] = True
-
-        curIdx = robots[i]
-        nxtIdx = curIdx + 1
-
-        # Move the Robots
-        if cellsWithRobot[nxtIdx]:
-            robots[i] = curIdx
-        else:
-            if belt[nxtIdx] > 0:
-                if nxtIdx == N - 1:
-                    toBePopped += 1
-                    cellsWithRobot[curIdx] = False
+    r[-1] = False
+    for i in range(len(r) - 2, -1, -1):
+        if r[i]:
+            if b[i + 1] > 0 and not r[i + 1]:
+                if i + 1 == N - 1:
+                    r[i] = False
                 else:
-                    cellsWithRobot[curIdx] = False
-                    cellsWithRobot[nxtIdx] = True
-                    robots[i] = nxtIdx
-                belt[nxtIdx] -= 1
-                if belt[nxtIdx] == 0:
-                    busted += 1
-                    if busted >= K:
-                        print(f"{process}")
+                    r[i], r[i + 1] = False, True
+                b[i + 1] -= 1
+                if b[i + 1] == 0:
+                    d += 1
+                    if d == K:
+                        print(f"{p}")
                         exit(0)
-            else:
-                robots[i] = curIdx
 
-    for i in range(toBePopped):
-        robots.pop(0)
-
-    # Load a Robot
-    if belt[0] > 0:
-        robots.append(0)
-        cellsWithRobot[0] = True
-        belt[0] -= 1
-        if belt[0] == 0:
-            busted += 1
-
-    if busted >= K:
-        print(f"{process}")
-        exit(0)
-
-    process += 1
+    if b[0] > 0:
+        r[0] = True
+        b[0] -= 1
+        if b[0] == 0:
+            d += 1
+            if d == K:
+                print(f"{p}")
+                exit(0)
