@@ -1,13 +1,7 @@
 from collections import deque
 N, K = list(map(int, input().strip().split()))
-
-beltArr = list(map(int, input().strip().split()))
-firstHalf = beltArr[:N]
-secondHalf = beltArr[N:]
-
-belt = deque(firstHalf + secondHalf)
+belt = deque(list(map(int, input().strip().split())))
 cellsWithRobot = deque([False] * 2 * N)
-
 robots = {}
 busted = 0
 for i in range(2 * N):
