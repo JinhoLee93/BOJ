@@ -3,13 +3,13 @@ from collections import deque
 N, K = list(map(int, input().strip().split()))
 b = deque(list(map(int, input().strip().split())))
 r = deque([False] * N)
-
 p, d = 0, 0
-while True:
-    p += 1
+def s1():
     b.rotate(1)
     r.rotate(1)
 
+def s2():
+    global p, d
     r[-1] = False
     for i in range(len(r) - 2, -1, -1):
         if r[i]:
@@ -25,6 +25,8 @@ while True:
                         print(f"{p}")
                         exit(0)
 
+def s3():
+    global p, d
     if b[0] > 0:
         r[0] = True
         b[0] -= 1
@@ -33,3 +35,9 @@ while True:
             if d == K:
                 print(f"{p}")
                 exit(0)
+
+while True:
+    p += 1
+    s1()
+    s2()
+    s3()
