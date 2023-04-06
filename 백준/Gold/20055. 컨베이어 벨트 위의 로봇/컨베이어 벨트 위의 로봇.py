@@ -1,43 +1,69 @@
 from collections import deque
-
 N, K = list(map(int, input().strip().split()))
-b = deque(list(map(int, input().strip().split())))
-r = deque([False] * N)
-p, d = 0, 0
-def s1():
-    b.rotate(1)
-    r.rotate(1)
+belt = deque(list(map(int, input().strip().split())))
+cellsWithRobot = deque([False] * 2 * N)
+robots = {}
+busted = 0
+for i in range(2 * N):
+    if belt[i] == 0:
+        busted += 1
 
-def s2():
-    global p, d
-    r[-1] = False
-    for i in range(len(r) - 2, -1, -1):
-        if r[i]:
-            if b[i + 1] > 0 and not r[i + 1]:
-                if i + 1 == N - 1:
-                    r[i] = False
+process, robotNumber = 1, 0
+while busted < K:
+    # Move the Belt
+    toBeAddedAtFirst = belt.pop()
+    toBeAddedAtFirstCell = cellsWithRobot.pop()
+    belt.appendleft(toBeAddedAtFirst)
+    cellsWithRobot.appendleft(toBeAddedAtFirstCell)
+
+    newRobotsAfterRobotsMove = {}
+    for robot in sorted(robots.keys()):
+        curIdx = robots[robot]
+        nxtIdx = curIdx + 1
+
+        # Move the Belt
+        if nxtIdx == N - 1:
+            cellsWithRobot[N - 1] = False
+            continue
+        else:
+            robots[robot] = nxtIdx
+
+        curIdx = robots[robot]
+        nxtIdx = curIdx + 1
+
+        # Move the Robots
+        if cellsWithRobot[nxtIdx]:
+            newRobotsAfterRobotsMove[robot] = curIdx
+        else:
+            if belt[nxtIdx] > 0:
+                if nxtIdx == N - 1:
+                    cellsWithRobot[curIdx] = False
                 else:
-                    r[i], r[i + 1] = False, True
-                b[i + 1] -= 1
-                if b[i + 1] == 0:
-                    d += 1
-                    if d == K:
-                        print(f"{p}")
+                    cellsWithRobot[curIdx] = False
+                    cellsWithRobot[nxtIdx] = True
+                    newRobotsAfterRobotsMove[robot] = nxtIdx
+                belt[nxtIdx] -= 1
+                if belt[nxtIdx] == 0:
+                    busted += 1
+                    if busted >= K:
+                        print(f"{process}")
                         exit(0)
+            else:
+                newRobotsAfterRobotsMove[robot] = curIdx
+    robots = newRobotsAfterRobotsMove
 
-def s3():
-    global p, d
-    if b[0] > 0:
-        r[0] = True
-        b[0] -= 1
-        if b[0] == 0:
-            d += 1
-            if d == K:
-                print(f"{p}")
-                exit(0)
+    # Load a Robot
+    if belt[0] > 0:
+        robots[robotNumber] = 0
+        cellsWithRobot[0] = True
+        robotNumber += 1
+        belt[0] -= 1
+        if belt[0] == 0:
+            busted += 1
 
-while True:
-    p += 1
-    s1()
-    s2()
-    s3()
+    if busted >= K:
+        break
+
+    process += 1
+
+print(f"{process}")
