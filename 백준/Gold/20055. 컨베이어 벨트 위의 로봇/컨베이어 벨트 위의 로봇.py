@@ -15,21 +15,23 @@ while busted < K:
     toBeAddedAtFirstCell = cellsWithRobot.pop()
     belt.appendleft(toBeAddedAtFirst)
     cellsWithRobot.appendleft(toBeAddedAtFirstCell)
-    newRobotsAfterBeltMoves = {}
-    for robot in robots:
-        robots[robot] += 1
-        if robots[robot] == N - 1:
-            cellsWithRobot[N - 1] = False
-            continue
-        else:
-            newRobotsAfterBeltMoves[robot] = robots[robot]
-    robots = newRobotsAfterBeltMoves
 
-    # Move the Robots
     newRobotsAfterRobotsMove = {}
     for robot in sorted(robots.keys()):
         curIdx = robots[robot]
         nxtIdx = curIdx + 1
+
+        # Move the Belt
+        if nxtIdx == N - 1:
+            cellsWithRobot[N - 1] = False
+            continue
+        else:
+            robots[robot] = nxtIdx
+
+        curIdx = robots[robot]
+        nxtIdx = curIdx + 1
+
+        # Move the Robots
         if cellsWithRobot[nxtIdx]:
             newRobotsAfterRobotsMove[robot] = curIdx
         else:
@@ -43,12 +45,12 @@ while busted < K:
                 belt[nxtIdx] -= 1
                 if belt[nxtIdx] == 0:
                     busted += 1
+                    if busted >= K:
+                        print(f"{process}")
+                        exit(0)
             else:
                 newRobotsAfterRobotsMove[robot] = curIdx
     robots = newRobotsAfterRobotsMove
-
-    if busted >= K:
-        break
 
     # Load a Robot
     if belt[0] > 0:
