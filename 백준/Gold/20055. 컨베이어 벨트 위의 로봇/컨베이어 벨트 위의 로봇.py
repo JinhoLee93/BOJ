@@ -1,7 +1,6 @@
-from collections import deque
 N, K = list(map(int, input().strip().split()))
-belt = deque(list(map(int, input().strip().split())))
-cellsWithRobot = deque([False] * 2 * N)
+belt = list(map(int, input().strip().split()))
+cellsWithRobot = [False] * N
 robots = {}
 busted = 0
 for i in range(2 * N):
@@ -12,9 +11,7 @@ process, robotNumber = 1, 0
 while busted < K:
     # Move the Belt
     toBeAddedAtFirst = belt.pop()
-    toBeAddedAtFirstCell = cellsWithRobot.pop()
-    belt.appendleft(toBeAddedAtFirst)
-    cellsWithRobot.appendleft(toBeAddedAtFirstCell)
+    belt = [toBeAddedAtFirst] + belt
 
     newRobotsAfterRobotsMove = {}
     for robot in sorted(robots.keys()):
@@ -23,10 +20,12 @@ while busted < K:
 
         # Move the Belt
         if nxtIdx == N - 1:
-            cellsWithRobot[N - 1] = False
+            cellsWithRobot[curIdx] = False
             continue
         else:
+            cellsWithRobot[curIdx] = False
             robots[robot] = nxtIdx
+            cellsWithRobot[nxtIdx] = True
 
         curIdx = robots[robot]
         nxtIdx = curIdx + 1
@@ -62,8 +61,7 @@ while busted < K:
             busted += 1
 
     if busted >= K:
-        break
+        print(f"{process}")
+        exit(0)
 
     process += 1
-
-print(f"{process}")
