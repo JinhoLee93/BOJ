@@ -32,11 +32,11 @@ for k in range(K):
             if rotations[nxtK][1] == cr:
                 rotations[nxtK][2] += col_moved
                 if rotations[nxtK][2] >= N:
-                    rotations[nxtK][2] = rotations[nxtK][2] % N
+                    rotations[nxtK][2] %= N
 
             if rotations[nxtK][2] == tc:
                 rotations[nxtK][1] += row_moved
                 if rotations[nxtK][1] >= N:
-                    rotations[nxtK][1] = rotations[nxtK][1] % N
+                    rotations[nxtK][1] %= N
 
     print(res)
