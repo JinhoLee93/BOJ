@@ -1,8 +1,10 @@
+import sys
+
 N, M = list(map(int, input().strip().split()))
 K = int(input())
 empty = set()
 for _ in range(K):
-    e = tuple(map(int, input().strip().split()))
+    e = tuple(map(int, sys.stdin.readline().strip().split()))
     e = (e[0] - 1, e[1] - 1)
     empty.add(e)
 
